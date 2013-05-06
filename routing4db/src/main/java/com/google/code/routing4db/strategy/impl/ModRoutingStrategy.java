@@ -17,7 +17,7 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 	/**
 	 * 数据源取余的基数
 	 * */
-	private long dataSourceNum;
+	private int dataSourceNum;
 	
 	/**
 	 * 取余的属性名
@@ -76,6 +76,7 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 		if(dataSources == null || dataSources.size() == 0){
 			throw new RoutingException("Find no datasource for mod value : " + modKey);
 		}
+		
 		String dataSourceKey = dataSources.get(0);
 		
 		logger.debug("method: " + method.getName() + " --> reslove routing parameter mod value: " + modKey + " --> routing to datasource: " + dataSourceKey);
@@ -97,13 +98,13 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 	
 	
 	
-	public void setDataSourceNum(long dataSourceNum) {
+	public void setDataSourceNum(int dataSourceNum) {
 		this.dataSourceNum = dataSourceNum;
 	}
 
 
 	public void setPropertyName(String propertyName) {
-		this.propertyName = propertyName;
+		this.propertyName = propertyName.trim();
 	}
 
 	public void afterPropertiesSet() throws Exception {
@@ -111,7 +112,7 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 		   throw new IllegalArgumentException("dataSourceNum must be bigger than zero and propertyName must not be null.");
 	   }
 	   
-	   if(dataSourceNum == dataSourceKeyMap.size()){
+	   if(dataSourceNum != dataSourceKeyMap.size()){
 		   throw new IllegalArgumentException("dataSourceNum must be equal with dataSourceKeyMap size");
 	   }
 	}

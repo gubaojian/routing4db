@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
+import com.google.code.routing4db.dao.User;
+import com.google.code.routing4db.dao.UserDao;
+import com.google.code.routing4db.dao.UserDaoImpl;
 import com.google.code.routing4db.holder.RoutingHolder;
 import com.google.code.routing4db.strategy.impl.ModRoutingStrategy;
 

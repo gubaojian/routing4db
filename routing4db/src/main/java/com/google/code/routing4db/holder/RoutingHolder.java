@@ -1,5 +1,9 @@
 package com.google.code.routing4db.holder;
 
+
+/**
+ * 存放当前数据源路由对应的key
+ * */
 public class RoutingHolder {
 	
 	/**

@@ -12,7 +12,7 @@ import com.google.code.routing4db.strategy.RoutingStrategy;
 /**
  * 动态代理拦截接口的请求
  * */
-public class RoutingInvocationHanlder implements InvocationHandler {
+public class RoutingInvocationHanlder implements InvocationHandler{
 
 	/**
 	 * 代理对象
@@ -47,15 +47,18 @@ public class RoutingInvocationHanlder implements InvocationHandler {
 			throw new IllegalArgumentException("routingStrategy must not be null");
 		}
 		
-		this.proxyTarget = proxyTarget;
-		this.routingStrategy = routingStrategy;
-		
-		/**
-		 * 处理接口上的方法，仅对接口上的方法执行路由逻辑
-		 * */
 		if(!interfaceClass.isInterface()){ 
 			throw new IllegalArgumentException("interfaceClass must be interface class");
 		}
+		
+		if(!interfaceClass.isInstance(proxyTarget)){
+			throw new IllegalArgumentException("proxyTarget must be sub class of " + interfaceClass.getName() + "; but proxyTarget class is " + proxyTarget.getClass().getName() + ", which is not sub class of the interface.");
+		}
+		
+		this.proxyTarget = proxyTarget;
+		this.routingStrategy = routingStrategy;
+		
+		
 		proxyInterfaceMethods = new HashMap<Method,Object>();
 		for(Method method : interfaceClass.getMethods()){
 			proxyInterfaceMethods.put(method, null);
@@ -81,5 +84,6 @@ public class RoutingInvocationHanlder implements InvocationHandler {
 			RoutingHolder.clean();
 		}
 	}
+
 
 }

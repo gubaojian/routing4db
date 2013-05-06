@@ -1,11 +1,10 @@
 package com.google.code.routing4db.strategy;
 
 import java.util.Random;
-import java.util.regex.Pattern;
-
-import org.springframework.util.PatternMatchUtils;
 
 import junit.framework.TestCase;
+
+import org.springframework.util.PatternMatchUtils;
 
 public class RandomTest extends TestCase{
 	
