@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.code.routing4db.dao.User;
+import com.google.code.routing4db.dao.UserDao;
+import com.google.code.routing4db.dao.UserDaoImpl;
 import com.google.code.routing4db.holder.RoutingHolder;
-import com.google.code.routing4db.strategy.User;
-import com.google.code.routing4db.strategy.UserDao;
-import com.google.code.routing4db.strategy.UserDaoImpl;
 import com.google.code.routing4db.strategy.impl.ModMasterSlaveRoutingStrategy;
 
 import junit.framework.Assert;

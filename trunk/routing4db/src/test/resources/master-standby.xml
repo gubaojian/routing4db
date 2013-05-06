@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+	http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-autowire="byName">
+<context:annotation-config>
+</context:annotation-config>
+
+<!-- Master数据源 -->
+<bean id="masterDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
+        <property name="jdbcUrl">
+           <value>jdbc:mysql://192.168.56.102:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
+        </property>
+        <property name="user" value="root" />  
+        <property name="password" value="lovejava" />  
+        <property name="initialPoolSize" value="2" />  
+        <property name="minPoolSize" value="2" />  
+        <property name="maxPoolSize" value="10" />  
+        <property name="acquireIncrement" value="5" />  
+        <property name="maxIdleTime" value="30" />  
+        <property name="maxStatements" value="0" />  
+        <property name="checkoutTimeout" value="2000"/>
+        <property name="acquireRetryAttempts" value="3"></property>
+</bean>
+
+<!-- Slave数据源 -->
+<bean id="standbyDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
+        <property name="jdbcUrl">
+           <value>jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
+        </property>
+        <property name="user" value="root" />  
+        <property name="password" value="lovejava" />  
+        <property name="initialPoolSize" value="2" />  
+        <property name="minPoolSize" value="2" />  
+        <property name="maxPoolSize" value="10" />  
+        <property name="acquireIncrement" value="5" />  
+        <property name="maxIdleTime" value="30" />  
+        <property name="maxStatements" value="0" />  
+        <property name="checkoutTimeout" value="2000"/>
+        <property name="acquireRetryAttempts" value="3"></property>
+</bean>
+
+<!-- 配置Master Standby 的数据源 -->
+<bean id="masterStandbyDataSource" class="com.google.code.routing4db.datasource.MasterStrandbyDataSource">  
+   <property name="standbyDataSource"  ref="standbyDataSource" />
+   <property name="masterDataSource"   ref="masterDataSource"/>  
+</bean>
+
+<!-- Mybatis SessionFactory配置 -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+    <property name="configLocation" value="classpath:mybatis-config.xml" />  
+    <property name="dataSource" ref="masterStandbyDataSource" />  
+</bean>  
+
+<!-- JdbcTemplate -->
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">   
+     <property name="dataSource" ref="masterStandbyDataSource"/>   
+</bean>
+
+
+<!-- 事务配置 -->
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <property name="dataSource" ref="masterStandbyDataSource" />
+</bean>
+<tx:annotation-driven transaction-manager="transactionManager"/>
+
+<!--  -->
+<bean id="userDao" class="com.google.code.routing4db.dao.UserDaoMybatisImpl"></bean>
+
+
+
+</beans>

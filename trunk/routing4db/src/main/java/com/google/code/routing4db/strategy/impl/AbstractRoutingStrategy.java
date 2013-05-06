@@ -29,15 +29,15 @@ public abstract class AbstractRoutingStrategy implements RoutingStrategy{
 	 * */
 	public void setDataSourceKeyMap(Map<Integer, String> dataSourceKeyMap) {
 		if(dataSourceKeyMap == null){
-			throw new IllegalArgumentException("slaveDataSourceKeyMap arugment must not be null");
+			throw new IllegalArgumentException("dataSourceKeyMap arugment must not be null");
 		}
 		if(dataSourceKeyMap.size() <= 0){
-			throw new IllegalArgumentException("slaveDataSourceKeyMap size must be big than zero");
+			throw new IllegalArgumentException("dataSourceKeyMap size must be big than zero");
 		}
 		//check num
 	    for(int i=0; i<dataSourceKeyMap.size(); i++){
 	    	if(dataSourceKeyMap.get(i) == null){
-	    		throw new IllegalArgumentException("slaveDataSourceKeyMap must be num and datasource key map. and num must start with zero and inscrment serial. such 0 -->ka  1--> kb 2-->kc  ");
+	    		throw new IllegalArgumentException("dataSourceKeyMap key must be serial num start with zero, ends with dataSourceKeyMap.size()-1. such 0 -->ka  1--> kb 2-->kc ");
 	    	}
 	    }
 	    

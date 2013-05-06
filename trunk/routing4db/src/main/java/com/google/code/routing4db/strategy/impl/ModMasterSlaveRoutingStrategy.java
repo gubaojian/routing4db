@@ -26,6 +26,12 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 			Object[] args) {
 		List<String> dataSources = dataSourceKeyMap.get(modKey);
 		String methodName = method.getName();
+		if(dataSources.size() == 1){
+			String masterDataSource = dataSources.get(0);  // always return master
+			logger.debug("method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to main datasource: " + masterDataSource);
+			RoutingHolder.setCurrentDataSourceKey(masterDataSource);
+			return;
+		}
 
 		//多个datasource，选择性路由
 		boolean isReadMethod = false;
@@ -39,7 +45,7 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 		//write to master
 		if(!isReadMethod){
 			String masterDataSource = dataSources.get(0);  // always return master
-			logger.debug("method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to master datasource: " + masterDataSource);
+			logger.debug("write method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to master datasource: " + masterDataSource);
 			RoutingHolder.setCurrentDataSourceKey(masterDataSource);
 			return;
 		}
@@ -48,7 +54,7 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 		//如果是read方法，从slave列表中随机选择一个
 		int index = random.nextInt(dataSources.size() - 1);
 		String slaveDataSourceKey = dataSources.get(index + 1); 
-		logger.debug("method: " +  methodName+ " --> reslove routing parameter mod value: " + modKey +  " --> routing to slave datasource: " + slaveDataSourceKey);
+		logger.debug("read method: " +  methodName+ " --> reslove routing parameter mod value: " + modKey +  " --> routing to slave datasource: " + slaveDataSourceKey);
 		RoutingHolder.setCurrentDataSourceKey(slaveDataSourceKey);
 	}
 

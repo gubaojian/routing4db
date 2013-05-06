@@ -6,7 +6,7 @@ import com.google.code.routing4db.holder.RoutingHolder;
 
 
 /**
- * 数据源路由
+ * 常规数据源路由
  * */
 public class Routing4DBDataSource extends AbstractRoutingDataSource {
 
