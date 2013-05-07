@@ -15,7 +15,7 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 public class MasterStrandbyDataSource extends AbstractDataSource implements InitializingBean{
 
 	/**
-	 * 主库和备库，
+	 * 主库和备库数据源，
 	 * */
 	private Object masterDataSource;
 	
@@ -48,22 +48,29 @@ public class MasterStrandbyDataSource extends AbstractDataSource implements Init
 	
 	@Override
 	public Connection getConnection() throws SQLException {
+		DataSource tmp = this.getCurrentDataSource();
 		try{
 			return this.getCurrentDataSource().getConnection();
 		}catch(SQLException sqle){
 			 logger.error("Get Connection Exception " + currentDataSource , sqle);
-			 this.switchToAvailableDataSource(); //自动切换
+			 if(tmp == this.getCurrentDataSource()){ //多线程环境有可能已经切换
+				 this.switchToAvailableDataSource(); //自动切换
+			 }
+			
 			 throw sqle;
 		}
 	}
 
 	@Override
 	public Connection getConnection(String username, String password)throws SQLException {
+		DataSource tmp = this.getCurrentDataSource();
 		try{
 		  return this.getCurrentDataSource().getConnection(username, password);
 		}catch(SQLException sqle){
 			 logger.error("Get Connection With Args Exception " + currentDataSource , sqle);
-			 this.switchToAvailableDataSource(); //自动切换
+			 if(tmp == this.getCurrentDataSource()){ //多线程环境有可能已经切换
+			     this.switchToAvailableDataSource(); //自动切换
+			 }
 			 throw sqle;
 		}
 	}
