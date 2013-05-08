@@ -77,11 +77,12 @@ public class RoutingInvocationHanlder implements InvocationHandler{
 		if(!proxyInterfaceMethods.containsKey(method)){
 			return method.invoke(proxyTarget, args);
 		}
+		String preRoutingHolderKey = RoutingHolder.getCurrentDataSourceKey();
 		try{
 			routingStrategy.route(proxyTarget, method, args);
 			return method.invoke(proxyTarget, args);
 		}finally{
-			RoutingHolder.clean();
+			RoutingHolder.setCurrentDataSourceKey(preRoutingHolderKey);
 		}
 	}
 

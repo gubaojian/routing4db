@@ -38,7 +38,7 @@
         <property name="acquireRetryAttempts" value="3"></property>
 </bean>
 
-<!-- Slave数据源 -->
+<!-- Standby数据源 -->
 <bean id="standbyDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
@@ -61,6 +61,8 @@
    <property name="standbyDataSource"  ref="standbyDataSource" />
    <property name="masterDataSource"   ref="masterDataSource"/>  
 </bean>
+
+
 
 <!-- Mybatis SessionFactory配置 -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
