@@ -19,8 +19,9 @@
 	>
 <context:annotation-config>
 </context:annotation-config>
-<!--  mode one 数据源 -->
-<bean id="dataSourceOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+
+<!-- 节点1 Master 数据源 -->
+<bean id="dataSourceOneMaster" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
            <value>jdbc:mysql://localhost:3306/test0?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
@@ -35,8 +36,41 @@
         <property name="maxStatements" value="0" />  
 </bean>
 
-<!-- mode two 数据源 -->
-<bean id="dataSourceTwo" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+<!-- 节点1 Slave数据源 -->
+<bean id="dataSourceOneSlaveOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
+        <property name="jdbcUrl">
+           <value>jdbc:mysql://localhost:3306/test0?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
+        </property>
+        <property name="user" value="root" />  
+        <property name="password" value="lovejava" />  
+        <property name="initialPoolSize" value="2" />  
+        <property name="minPoolSize" value="2" />  
+        <property name="maxPoolSize" value="10" />  
+        <property name="acquireIncrement" value="5" />  
+        <property name="maxIdleTime" value="30" />  
+        <property name="maxStatements" value="0" />  
+</bean>
+<!-- 节点1 Slave 数据源 -->
+<bean id="dataSourceOneSlaveTwo" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
+        <property name="jdbcUrl">
+           <value>jdbc:mysql://localhost:3306/test0?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
+        </property>
+        <property name="user" value="root" />  
+        <property name="password" value="lovejava" />  
+        <property name="initialPoolSize" value="2" />  
+        <property name="minPoolSize" value="2" />  
+        <property name="maxPoolSize" value="10" />  
+        <property name="acquireIncrement" value="5" />  
+        <property name="maxIdleTime" value="30" />  
+        <property name="maxStatements" value="0" />  
+</bean>
+
+
+
+<!-- 节点2 Master 数据源 -->
+<bean id="dataSourceTwoMaster" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
            <value>jdbc:mysql://localhost:3306/test1?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
@@ -50,11 +84,12 @@
         <property name="maxIdleTime" value="30" />  
         <property name="maxStatements" value="0" />  
 </bean>
-<!-- mode three 数据源 -->
-<bean id="dataSourceThree" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+
+<!-- 节点2 Slave 数据源 -->
+<bean id="dataSourceSlaveOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
-           <value>jdbc:mysql://localhost:3306/test2?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
+           <value>jdbc:mysql://localhost:3306/test1?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
         </property>
         <property name="user" value="root" />  
         <property name="password" value="lovejava" />  
@@ -66,11 +101,11 @@
         <property name="maxStatements" value="0" />  
 </bean>
 
-<!-- mode four 数据源 -->
-<bean id="dataSourceFour" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+<!-- 节点2 Slave 数据源 -->
+<bean id="dataSourceSlaveTwo" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
-           <value>jdbc:mysql://localhost:3306/test3?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
+           <value>jdbc:mysql://localhost:3306/test1?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
         </property>
         <property name="user" value="root" />  
         <property name="password" value="lovejava" />  
@@ -81,20 +116,24 @@
         <property name="maxIdleTime" value="30" />  
         <property name="maxStatements" value="0" />  
 </bean>
+
 
 <!-- 配置Routing4DB 数据源 -->
 <bean id="routing4DBDataSource" class="com.google.code.routing4db.datasource.Routing4DBDataSource">  
    <property name="targetDataSources">
       <map>
-         <entry key="dataSourceOne" value-ref="dataSourceOne"/>
-         <entry key="dataSourceTwo" value-ref="dataSourceTwo"/>
-         <entry key="dataSourceThree" value-ref="dataSourceThree"/>
-         <entry key="dataSourceFour" value-ref="dataSourceFour"/>
+	      <entry key="dataSourceOneMaster" value-ref="dataSourceOneMaster"/>
+	      <entry key="dataSourceOneSlaveOne" value-ref="dataSourceOneSlaveOne"/>
+	      <entry key="dataSourceOneSlaveTwo" value-ref="dataSourceOneSlaveTwo"/>
+	      <entry key="dataSourceTwoMaster" value-ref="dataSourceTwoMaster"/>
+	      <entry key="dataSourceSlaveOne" value-ref="dataSourceSlaveOne"/>
+	      <entry key="dataSourceSlaveTwo" value-ref="dataSourceSlaveTwo"/>
       </map>
     </property>
-    <!-- 无路由配置时默认的datasource -->
-   <property name="defaultTargetDataSource" ref="dataSourceOne"/>  
+    <!-- 默认的datasource -->
+   <property name="defaultTargetDataSource" ref="dataSourceOneMaster"/>  
 </bean>
+
 
 <!-- JdbcTemplate -->
 <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">   
@@ -109,17 +148,21 @@
 
 
 <!-- 配置路由策略 -->
-<bean id="modRoutingStrategy" class="com.google.code.routing4db.strategy.impl.ModRoutingStrategy">
-     <!-- 分4个数据库, 采用Id属性进行分库路由 --> 
-     <property name="dataSourceNum" value="4"></property>  
-      <property name="propertyName" value="id"></property>  
+<bean id="modMasterSlaveRoutingStrategy" class="com.google.code.routing4db.strategy.impl.ModMasterSlaveRoutingStrategy">
+     <!-- 分2集群组, 采用Id属性进行分库路由 --> 
+     <property name="dataSourceNum" value="2"></property>  
+     <property name="propertyName" value="id"></property>  
+     <property name="readMethodPatterns">
+         <list>  
+            <value>*get*</value>
+            <value>*find*</value>
+         </list>
+     </property>  
      <!--取模的数据源 从0开始，以此编号 -->
      <property name="dataSourceKeyMap">
          <map>
-           <entry key="0" value="dataSourceOne"></entry>
-           <entry key="1" value="dataSourceTwo"></entry>
-           <entry key="2" value="dataSourceThree"></entry>
-           <entry key="3" value="dataSourceFour"></entry>
+           <entry key="0" value="dataSourceOneMaster,dataSourceOneSlaveOne,dataSourceOneSlaveTwo"></entry>
+           <entry key="1" value="dataSourceTwoMaster,dataSourceTwoSlaveOne,dataSourceTwoSlaveTwo"></entry>
          </map> 
      </property>
 </bean>
@@ -136,7 +179,7 @@
      <property name="targetObject" ref="userDaoTarget"></property>
      
      <!-- 路由策略 -->
-     <property name="routingStrategy" ref="modRoutingStrategy"></property>
+     <property name="routingStrategy" ref="modMasterSlaveRoutingStrategy"></property>
 </bean>
 
 </beans>

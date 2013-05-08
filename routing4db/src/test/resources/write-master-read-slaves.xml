@@ -69,6 +69,7 @@
 <!-- 配置Routing4DB 数据源 -->
 <bean id="routing4DBDataSource" class="com.google.code.routing4db.datasource.Routing4DBDataSource">  
    <property name="targetDataSources">
+     <!-- 配置数据源标示符号 -->
       <map>
          <entry key="slaveDataSourceOne" value-ref="slaveDataSourceOne"/>
          <entry key="slaveDataSourceTwo" value-ref="slaveDataSourceTwo"/>
@@ -90,6 +91,7 @@
 
 <!-- 配置路由策略 -->
 <bean id="masterSlaveStrategy" class="com.google.code.routing4db.strategy.impl.MasterSlaveStrategy">   
+     <!-- 读接口的方法通配符 -->
      <property name="readMethodPatterns">
          <list>  
             <value>*get*</value>
@@ -104,9 +106,9 @@
          <map>
            <entry key="0" value="slaveDataSourceOne"></entry>
            <entry key="1" value="slaveDataSourceTwo"></entry>
-           <!-- 读master 
+           <!-- 读master -->
            <entry key="2" value="masterDataSource"></entry>
-           -->
+       
          </map>
      </property>
 </bean>

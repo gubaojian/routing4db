@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +25,10 @@ public class UserDaoJdbcTemplateImpl implements UserDao{
 	}
 
 	public User getUserById(long id) {
-		User user = jdbcTemplate.queryForObject("select id, name from user where id = ?", new Object[]{id}, UserRowMapper.instance());
-		user.setName(user.getName() + " read user from " + RoutingHolder.getCurrentDataSourceKey());
-		return user;
+			User user = jdbcTemplate.queryForObject("select id, name from user where id = ?", new Object[]{id}, UserRowMapper.instance());
+			user.setName(user.getName() + " read user from " + RoutingHolder.getCurrentDataSourceKey());
+			return user;
+		
 	}
 	
 	/**

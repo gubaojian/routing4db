@@ -118,7 +118,7 @@
 
 
 <!-- 配置DAO接口代理 (此方式不支持事务)  -->
-<bean id="userDao" class="com.google.code.routing4db.mybatis.RoutingMapperFactoryBean">
+<bean id="userMapper" class="com.google.code.routing4db.mybatis.RoutingMapperFactoryBean">
     <property name="mapperInterface" value="com.google.code.routing4db.dao.UserMapper" />  
     <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
      <!-- 路由策略 -->

@@ -126,12 +126,11 @@ public class MasterStrandbyDataSource extends AbstractDataSource implements Init
 		Connection  conn = null;
 		String select = "select 1";
 		try{
-			conn = dataSource.getConnection();
+			 conn = dataSource.getConnection();
 			 Statement stmt = conn.createStatement();
-			 if(stmt.execute(select)){
-				 return true;
-			 }
+			 boolean success = stmt.execute(select); //如果执行成功，会返回结果
 			 stmt.close();
+			 return success;
 		}catch(SQLException e){
 			logger.error("CheckDataSourceAvailable Exception", e);
 			return false;
@@ -144,7 +143,6 @@ public class MasterStrandbyDataSource extends AbstractDataSource implements Init
 				}
 			}
 		}
-		return false;
 	}
 
 	/**
