@@ -76,7 +76,7 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 		if(dataSources == null || dataSources.size() == 0){
 			throw new RoutingException("Find no datasource for mod value : " + modKey);
 		}
-		//always return master
+		//always return master £¿
 		String dataSourceKey = dataSources.get(0);
 		
 		logger.debug("method: " + method.getName() + " --> reslove routing parameter mod value: " + modKey + " --> routing to datasource: " + dataSourceKey);
