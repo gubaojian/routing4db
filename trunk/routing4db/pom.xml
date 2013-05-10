@@ -8,7 +8,12 @@
 
 	<name>routing4db</name>
 	<url>http://maven.apache.org</url>
-
+     <distributionManagement>
+        <repository>
+            <id>Routing4DB</id>
+            <url></url>
+        </repository>
+    </distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>GBK</project.build.sourceEncoding>
         <project.reporting.outputEncoding>GBK</project.reporting.outputEncoding>
@@ -91,6 +96,18 @@
 					<target>1.6</target>
 					<encoding>GBK</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-deploy-plugin</artifactId>
+              <version>2.6</version>
+               <dependencies>
+			      <dependency>
+                    <groupId>com.google.code.maven-svn-wagon</groupId>
+                    <artifactId>maven-svn-wagon</artifactId>
+                    <version>1.4</version>
+                   </dependency>
+               </dependencies>
 			</plugin>
 		</plugins>
 	</build>

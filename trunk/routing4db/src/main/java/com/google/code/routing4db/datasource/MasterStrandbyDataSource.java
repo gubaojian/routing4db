@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
@@ -46,30 +47,34 @@ public class MasterStrandbyDataSource extends AbstractDataSource implements Init
 	 * */
 	private Properties configProperties;
 	
+	/**
+	 * 无阻塞原子计数锁
+	 * */
+	private AtomicInteger lock = new AtomicInteger(0);
+	
 	@Override
 	public Connection getConnection() throws SQLException {
-		DataSource tmp = this.getCurrentDataSource();
+		DataSource sessionDataSource = this.getCurrentDataSource();
 		try{
-			return this.getCurrentDataSource().getConnection();
+			return sessionDataSource.getConnection();
 		}catch(SQLException sqle){
 			 logger.error("Get Connection Exception " + currentDataSource , sqle);
-			 if(tmp == this.getCurrentDataSource()){ //多线程环境有可能已经切换
-				 this.switchToAvailableDataSource(); //自动切换
+			 if(sessionDataSource == this.getCurrentDataSource()){ //多线程环境有可能已经切换
+				    this.switchToAvailableDataSource(); //自动切换
 			 }
-			
 			 throw sqle;
 		}
 	}
 
 	@Override
 	public Connection getConnection(String username, String password)throws SQLException {
-		DataSource tmp = this.getCurrentDataSource();
+		DataSource sessionDataSource = this.getCurrentDataSource();
 		try{
-		  return this.getCurrentDataSource().getConnection(username, password);
+		  return sessionDataSource.getConnection(username, password);
 		}catch(SQLException sqle){
 			 logger.error("Get Connection With Args Exception " + currentDataSource , sqle);
-			 if(tmp == this.getCurrentDataSource()){ //多线程环境有可能已经切换
-			     this.switchToAvailableDataSource(); //自动切换
+			 if(sessionDataSource == this.getCurrentDataSource()){ //多线程环境有可能已经切换
+			        this.switchToAvailableDataSource(); 
 			 }
 			 throw sqle;
 		}
@@ -105,15 +110,24 @@ public class MasterStrandbyDataSource extends AbstractDataSource implements Init
 	 * 如果已经连接到备库，如果主库可用，切换到主库
 	 * */
 	protected void switchToAvailableDataSource(){
-		if(currentDataSource == resolvedStandbyDataSource){
-			if(this.isDataSourceAvailable(resolvedMasterDataSource)){
+		try{
+			if(lock.incrementAndGet() > 1){ //允许一个线程去更新
+				return;
+			}
+			
+			if(currentDataSource == resolvedStandbyDataSource){
+				if(this.isDataSourceAvailable(resolvedMasterDataSource)){
+					currentDataSource = resolvedMasterDataSource;
+				}
+			}else{
 				currentDataSource = resolvedMasterDataSource;
+				if(!this.isDataSourceAvailable(resolvedMasterDataSource)){
+					currentDataSource =  resolvedStandbyDataSource;
+				}
 			}
-		}else{
-			currentDataSource = resolvedMasterDataSource;
-			if(!this.isDataSourceAvailable(resolvedMasterDataSource)){
-				currentDataSource =  resolvedStandbyDataSource;
-			}
+			
+		}finally{
+			lock.decrementAndGet();
 		}
 	}
 	
