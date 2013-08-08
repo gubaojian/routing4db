@@ -16,4 +16,7 @@ public class UserDaoImpl implements UserDao{
 	public void insertWithTransaction(User user) {
 	}
 
+	@Override
+	public void excludeMethod() {}
+
 }

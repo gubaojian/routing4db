@@ -114,6 +114,15 @@
            <entry key="1" value="slaveDataSourceTwo"></entry>
          </map>
      </property>
+     
+      <!-- 指定某些接口的方法不执行路由，若接口所有方法都执行路由，则无需配置该属性 -->
+     <property name="excludeMethodPatterns">
+         <list>  
+            <value>excludeMethodPatterns*</value>
+            <value>*exclude*</value>
+         </list>
+     </property> 
+     
 </bean>
 
 

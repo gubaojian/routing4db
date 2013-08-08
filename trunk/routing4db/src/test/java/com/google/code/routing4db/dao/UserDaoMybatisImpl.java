@@ -19,4 +19,7 @@ public class UserDaoMybatisImpl extends SqlSessionDaoSupport implements UserDao{
 		throw new RuntimeException("xxx");
 	}
 
+	@Override
+	public void excludeMethod() {}
+
 }

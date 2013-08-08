@@ -42,7 +42,7 @@ public class MasterSlaveStrategy  extends AbstractRoutingStrategy implements  In
 	/**
 	 * 执行Master-Slave路由策略。如果是写，则选用master数据源，否则，从配置的数据源中随机选择一个进行读。
 	 * */
-	public void route(Object target, Method method, Object[] args) {
+	public void executeRoute(Object target, Method method, Object[] args) {
 		boolean isReadMethod = false;
 		String methodName = method.getName();
 		for(String pattern : readMethodPatterns){
@@ -52,7 +52,9 @@ public class MasterSlaveStrategy  extends AbstractRoutingStrategy implements  In
 			}
 		}
 		if(!isReadMethod){
-			logger.debug("method: " +  methodName + " --> routing to master datasource: " + masterDataSourceKey);
+			if(logger.isDebugEnabled()){
+				logger.debug("method: " +  methodName + " --> routing to master datasource: " + masterDataSourceKey);
+			}
 			RoutingHolder.setCurrentDataSourceKey(masterDataSourceKey);
 			return;
 		}
@@ -60,14 +62,15 @@ public class MasterSlaveStrategy  extends AbstractRoutingStrategy implements  In
 		List<String> keys = dataSourceKeyMap.get(mapKey);
 		int index = random.nextInt(keys.size());
 		String slaveDataSourceKey = keys.get(index);
-		
-		logger.debug("method: " +  methodName + " --> routing to slave datasource: " + slaveDataSourceKey);
+		if(logger.isDebugEnabled()){
+		    logger.debug("method: " +  methodName + " --> routing to slave datasource: " + slaveDataSourceKey);
+		}
 		RoutingHolder.setCurrentDataSourceKey(slaveDataSourceKey);
 	}
 
 
 	public void setReadMethodPatterns(List<String> readMethodPatterns) {
-		this.readMethodPatterns = StrategyUtils.validReadMethodPatterns(readMethodPatterns);
+		this.readMethodPatterns = ValidateUtils.validReadMethodPatterns(readMethodPatterns);
 	}
 
 	public void setMasterDataSourceKey(String masterDataSourceKey) {

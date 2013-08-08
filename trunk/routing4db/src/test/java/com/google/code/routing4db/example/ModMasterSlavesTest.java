@@ -30,7 +30,7 @@ public class ModMasterSlavesTest extends TestCase{
 	static List<String> dataSources = new ArrayList<String>();
 	static{
 		dataSources.add("dataSourceOneMaster");
-		dataSources.add("dataSourceOneTwo");
+		dataSources.add("dataSourceTwoMaster");
 	}
 	/**
 	 * Çå³ýÊý¾Ý

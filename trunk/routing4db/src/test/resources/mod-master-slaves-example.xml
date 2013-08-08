@@ -86,7 +86,7 @@
 </bean>
 
 <!-- 节点2 Slave 数据源 -->
-<bean id="dataSourceSlaveOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+<bean id="dataSourceTwoSlaveOne" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
            <value>jdbc:mysql://localhost:3306/test1?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
@@ -102,7 +102,7 @@
 </bean>
 
 <!-- 节点2 Slave 数据源 -->
-<bean id="dataSourceSlaveTwo" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+<bean id="dataSourceTwoSlaveTwo" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
         <property name="jdbcUrl">
            <value>jdbc:mysql://localhost:3306/test1?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false</value>  
@@ -126,8 +126,8 @@
 	      <entry key="dataSourceOneSlaveOne" value-ref="dataSourceOneSlaveOne"/>
 	      <entry key="dataSourceOneSlaveTwo" value-ref="dataSourceOneSlaveTwo"/>
 	      <entry key="dataSourceTwoMaster" value-ref="dataSourceTwoMaster"/>
-	      <entry key="dataSourceSlaveOne" value-ref="dataSourceSlaveOne"/>
-	      <entry key="dataSourceSlaveTwo" value-ref="dataSourceSlaveTwo"/>
+	      <entry key="dataSourceTwoSlaveOne" value-ref="dataSourceTwoSlaveOne"/>
+	      <entry key="dataSourceTwoSlaveTwo" value-ref="dataSourceTwoSlaveTwo"/>
       </map>
     </property>
     <!-- 默认的datasource -->
@@ -165,6 +165,15 @@
            <entry key="1" value="dataSourceTwoMaster,dataSourceTwoSlaveOne,dataSourceTwoSlaveTwo"></entry>
          </map> 
      </property>
+     
+     <!-- 指定某些接口的方法不执行路由，若接口所有方法都执行路由，则无需配置该属性 -->
+     <property name="excludeMethodPatterns">
+         <list>  
+            <value>excludeMethodPatterns*</value>
+            <value>*exclude*</value>
+         </list>
+     </property> 
+    
 </bean>
 
 <!-- Dao实现 -->
