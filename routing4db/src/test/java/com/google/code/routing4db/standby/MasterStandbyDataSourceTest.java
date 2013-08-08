@@ -48,10 +48,11 @@ public class MasterStandbyDataSourceTest extends TestCase{
 			   try{
 				   userDao.insert(user);
 			   }catch(Exception e){
-				   
+				   e.printStackTrace();
+				   Thread.sleep(20*1000);
 			   }
 			   
-			   Thread.sleep(20*1000);
+			  
 			   System.out.println(user.getName());
 		 }	
 	}

@@ -18,7 +18,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
 	>
 <context:annotation-config>
-</context:annotation-config>
+</context:annotation-config> 
 <!-- Master数据源 -->
 <bean id="masterDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>  
@@ -71,6 +71,9 @@
    <property name="targetDataSources">
      <!-- 配置数据源标示符号 -->
       <map>
+         <!-- master datasource -->
+         <entry key="masterDataSource" value-ref="masterDataSource"></entry>
+         <!-- slave数据源编号 -->
          <entry key="slaveDataSourceOne" value-ref="slaveDataSourceOne"/>
          <entry key="slaveDataSourceTwo" value-ref="slaveDataSourceTwo"/>
       </map>
@@ -98,7 +101,7 @@
             <value>*find*</value>
          </list>
      </property>  
-     <!-- Master数据源 -->
+     <!-- Master数据源对应得key，若不配，则采用默认数据源 -->
      <property name="masterDataSourceKey" value="masterDataSource"></property>
      
      <!-- Slaves数据源 从0开始，以此编号 -->
@@ -106,11 +109,19 @@
          <map>
            <entry key="0" value="slaveDataSourceOne"></entry>
            <entry key="1" value="slaveDataSourceTwo"></entry>
-           <!-- 读master -->
+           <!-- 若需要读master 则可将master按一个slaves的方式配置
            <entry key="2" value="masterDataSource"></entry>
-       
+           -->
          </map>
      </property>
+     
+      <!-- 指定某些接口的方法不执行路由，若接口所有方法都执行路由，则无需配置该属性 -->
+     <property name="excludeMethodPatterns">
+         <list>  
+            <value>excludeMethodPatterns*</value>
+            <value>*exclude*</value>
+         </list>
+     </property> 
 </bean>
 
 <!-- Dao实现 -->

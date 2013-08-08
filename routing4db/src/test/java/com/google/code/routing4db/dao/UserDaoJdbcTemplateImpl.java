@@ -54,4 +54,7 @@ public class UserDaoJdbcTemplateImpl implements UserDao{
 		jdbcTemplate.execute(sql);
 		throw new RuntimeException("Transaction test");
 	}
+
+	@Override
+	public void excludeMethod() {}
 }

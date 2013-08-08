@@ -13,5 +13,8 @@ public interface UserDao {
 	
 
 	public void insertWithTransaction(User user);
+	
+	
+	public void excludeMethod();
 
 }

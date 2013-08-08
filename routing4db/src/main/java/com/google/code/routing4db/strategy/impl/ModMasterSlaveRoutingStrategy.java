@@ -28,7 +28,9 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 		String methodName = method.getName();
 		if(dataSources.size() == 1){
 			String masterDataSource = dataSources.get(0);  // always return master
-			logger.debug("method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to main datasource: " + masterDataSource);
+			if(logger.isDebugEnabled()){
+			  logger.debug("method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to main datasource: " + masterDataSource);
+			}
 			RoutingHolder.setCurrentDataSourceKey(masterDataSource);
 			return;
 		}
@@ -45,7 +47,9 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 		//write to master
 		if(!isReadMethod){
 			String masterDataSource = dataSources.get(0);  // always return master
-			logger.debug("write method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to master datasource: " + masterDataSource);
+			if(logger.isDebugEnabled()){
+			   logger.debug("write method: " +  methodName + " --> reslove routing parameter mod value: " + modKey + " --> routing to master datasource: " + masterDataSource);
+			}
 			RoutingHolder.setCurrentDataSourceKey(masterDataSource);
 			return;
 		}
@@ -54,7 +58,9 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 		//如果是read方法，从slave列表中随机选择一个
 		int index = random.nextInt(dataSources.size() - 1);
 		String slaveDataSourceKey = dataSources.get(index + 1); 
-		logger.debug("read method: " +  methodName+ " --> reslove routing parameter mod value: " + modKey +  " --> routing to slave datasource: " + slaveDataSourceKey);
+		if(logger.isDebugEnabled()){
+		   logger.debug("read method: " +  methodName+ " --> reslove routing parameter mod value: " + modKey +  " --> routing to slave datasource: " + slaveDataSourceKey);
+		}
 		RoutingHolder.setCurrentDataSourceKey(slaveDataSourceKey);
 	}
 
@@ -69,7 +75,7 @@ public class ModMasterSlaveRoutingStrategy extends ModRoutingStrategy{
 
 
 	public void setReadMethodPatterns(List<String> readMethodPatterns) {
-		this.readMethodPatterns = StrategyUtils.validReadMethodPatterns(readMethodPatterns);
+		this.readMethodPatterns = ValidateUtils.validReadMethodPatterns(readMethodPatterns);
 	}
 
 }

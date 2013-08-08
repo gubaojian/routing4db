@@ -60,6 +60,17 @@
 <bean id="masterStandbyDataSource" class="com.google.code.routing4db.datasource.MasterStrandbyDataSource">  
    <property name="standbyDataSource"  ref="standbyDataSource" />
    <property name="masterDataSource"   ref="masterDataSource"/>  
+   <!-- 其它配置属性（可选） -->
+   <property name="configProperties">
+       <props>
+          <!-- 检查数据源的时间间隔，单位为毫秒，默认配置为10秒钟检查一次 -->
+          <prop key="checkTimeInterval">10000</prop>  
+          <!-- 检查数据源是否有效时执行的sql，配置一条可执行的sql即可；请根据数据库不同进行配置。比如mysql下可配置为 select 1 而select 1 在oracle无法执行，oracle则可配置为 select 1 from dual  -->
+          <prop key="checkAvailableSql">select 1</prop>  
+       </props>
+   </property>
+   
+   
 </bean>
 
 

@@ -24,12 +24,14 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 	 * */
 	private String propertyName;
 	
-	public  void route(Object target, Method method, Object[] args) {
+	public  void executeRoute(Object target, Method method, Object[] args) {
 		if(args.length == 0){
 			 throw new IllegalArgumentException("method must have routing parameter and default mod routing strategy only support one routing parameter or one java bean paramter that contains routing property name");
 		}
 		if(args.length > 1){
-			logger.warn(target + "--> method: " + method.getName() + "has mutl parameter, choose first parameter as routing parameter");
+			if(logger.isDebugEnabled()){
+			  logger.debug(target + "--> method: " + method.getName() + "has mutl parameter, choose first parameter as routing parameter");
+			}
 		}
 		
 		Object routingArgs = args[0];
@@ -64,6 +66,9 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 		if(routingIdentify != 0){
 			modKey =(int)(routingIdentify%dataSourceNum);
 		}
+		if(logger.isDebugEnabled()){
+		   logger.debug(method.getName() + " routing parameter value --> " + routingIdentify  + "  mod value --> " + modKey);
+		}
 		this.routeForModValue(modKey, target, method, args);
 	}
 
@@ -78,8 +83,9 @@ public class ModRoutingStrategy  extends AbstractRoutingStrategy implements Init
 		}
 		//always return master £¿
 		String dataSourceKey = dataSources.get(0);
-		
-		logger.debug("method: " + method.getName() + " --> reslove routing parameter mod value: " + modKey + " --> routing to datasource: " + dataSourceKey);
+		if(logger.isDebugEnabled()){
+			logger.debug("method: " + method.getName() + " --> reslove routing parameter mod value: " + modKey + " --> routing to datasource: " + dataSourceKey);
+		}
 		RoutingHolder.setCurrentDataSourceKey(dataSourceKey); // always return master
 	}
 
