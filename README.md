@@ -45,22 +45,22 @@
 ##### 六、支持单数据源事务
 
 
-七、针对Mybatis的增强功能
+##### 七、针对Mybatis的增强功能
 
 Maven依赖
-```
-<dependency>
-        <groupId>com.google.code.routing4db</groupId>
-	<artifactId>routing4db</artifactId>
-	<version>1.1.0</version>
-</dependency>
 
-<repository>
-      <id>routing4db.googlecode.com</id>
-      <url>http://routing4db.googlecode.com/svn/trunk/repository</url>
-</repository>
+    <dependency>
+       <groupId>com.google.code.routing4db</groupId>
+	   <artifactId>routing4db</artifactId>
+	   <version>1.1.0</version>
+    </dependency>
 
-```
+    <repository>
+      <id>routing4db.github.com</id>
+      <url>https://github.com/gubaojian/routing4db/raw/master/repository</url>
+    </repository>
+
+
 
 **[快速入门参考](https://github.com/gubaojian/routing4db/raw/master/docs/Routing4DB%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A31.1.0.pdf)**
 
