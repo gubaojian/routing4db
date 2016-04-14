@@ -1,4 +1,4 @@
-# routing4db
+# Routing4DB
 
 
 **Routing4DB** 是由Java实现的基于[接口代理策略](http://gubaojian.blog.163.com/blog/static/166179908201332432825361/)实现的数据源路由框架。通过数据源路由实现以下功能：
