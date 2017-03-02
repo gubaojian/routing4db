@@ -73,7 +73,7 @@ Maven依赖
 
 项目作者：谷宝剑
 
-Email： gubaojian@163.com(常用)    efurture@gmail.com(已废弃)
+Email： gubaojian@163.com efurture@gmail.com
 
 QQ号:  787277208
 
